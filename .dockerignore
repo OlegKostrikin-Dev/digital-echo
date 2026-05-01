@@ -1,0 +1,45 @@
+# Секреты и переменные окружения
+.env
+.env.*
+!.env.example
+
+# Скомпилированные снапшоты и кэши данных
+snapshots/
+*.pkl
+
+# Документация/билд-артефакты
+site/
+docs/
+
+# Транскрипты, ассеты, временные
+agent-transcripts/
+assets/
+.cursor/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.npm/
+dist/
+build/
+
+# IDE/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore

@@ -1,0 +1,75 @@
+# Production compose для демо-сервера digital-echo-core.
+#
+# Отличия от docker-compose.yml (dev):
+#  - по умолчанию backend в READONLY_SNAPSHOT (демо без live-БД);
+#  - web: VITE_API_URL / VITE_DOCS_URL задаются при деплое (публичные URL,
+#    без внутренних IP из контура данных);
+#  - backend: env_file .env — опционально, только если на сервере
+#    намеренно включают live-пересчёт (READONLY_SNAPSHOT=0); иначе в .env
+#    достаточно пустых MYSQL_* / пустого файла.
+#
+# Запуск:  docker compose -f docker-compose.prod.yml up -d --build
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: services/backend/Dockerfile
+    container_name: digital-echo-backend
+    command:
+      - uvicorn
+      - src.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+    environment:
+      PYTHONPATH: /app
+      CORS_ORIGINS: ${PUBLIC_CORS_ORIGINS:-*}
+      # Снапшот загружается при старте — мгновенно ready, не ждём 80 сек.
+      SNAPSHOT_PATH: /app/snapshots/graph.pkl
+      # По умолчанию демо-сервер работает в read-only.
+      # Live-пересчёт через VPN возможен, но медленный (MySQL обрывает
+      # тяжёлые запросы по wait_timeout). Чтобы переключиться в live,
+      # экспортируйте READONLY_SNAPSHOT=0 перед docker compose up.
+      READONLY_SNAPSHOT: ${READONLY_SNAPSHOT:-1}
+    env_file:
+      - .env
+    volumes:
+      - ./snapshots:/app/snapshots
+    ports:
+      - "8001:8000"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: digital-echo-web
+    environment:
+      # PUBLIC_API_URL и PUBLIC_DOCS_URL ОБЯЗАТЕЛЬНО должны быть заданы
+      # в .env при деплое (например, через .env-файл на сервере).
+      # Это публичный адрес, по которому браузер пользователя достучится
+      # до бэкенда и до документации. В репозитории мы не храним конкретный
+      # адрес демо-сервера — иначе он попадёт в публичные источники.
+      VITE_API_URL: ${PUBLIC_API_URL:?PUBLIC_API_URL must be set in .env}
+      VITE_DOCS_URL: ${PUBLIC_DOCS_URL:?PUBLIC_DOCS_URL must be set in .env}
+      CHOKIDAR_USEPOLLING: "1"
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/apps/web/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  docs:
+    image: squidfunk/mkdocs-material:9.5.39
+    container_name: digital-echo-docs
+    ports:
+      - "8080:8000"
+    volumes:
+      - .:/docs
+    command: serve --dev-addr 0.0.0.0:8000
+    restart: unless-stopped

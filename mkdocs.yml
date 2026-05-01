@@ -1,0 +1,111 @@
+site_name: digital-echo-core
+site_description: Аналитический движок для расчёта индекса казахстанского содержания
+site_url: http://localhost:8000
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: ru
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/brightness-7
+        name: Тёмная тема
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/brightness-4
+        name: Светлая тема
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.highlight
+    - search.suggest
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra_javascript:
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+extra:
+  generator: false
+
+nav:
+  - Главная: index.md
+  - О проекте простыми словами: executive-summary.md
+  - Архитектура: architecture.md
+  - Алгоритм:
+      - algorithm/index.md
+      - Граф транзакций: algorithm/graph-construction.md
+      - Расчёт индекса КС: algorithm/kz-content.md
+      - Конусы и аналитика: algorithm/analytical-views.md
+  - Источники данных:
+      - MySQL (источник ЭСФ): data-sources/mysql.md
+      - VoltDB (taxpayer): data-sources/voltdb.md
+      - Нормализация BIN: data-sources/bin-normalization.md
+  - Эксплуатация:
+      - operations/setup.md
+      - operations/running.md
+      - Демо-сценарии: operations/demo-scenarios.md
+      - Диагностика: operations/troubleshooting.md
+  - ADR:
+      - decisions/index.md
+      - 001 — NetworkX как движок графа: decisions/001-graph-engine.md
+      - 002 — Резидентность из VoltDB: decisions/002-voltdb-residency.md
+      - 003 — Fixed-point итерации: decisions/003-iterative-fixed-point.md
+  - Ограничения и Roadmap:
+      - limitations.md
+      - roadmap.md

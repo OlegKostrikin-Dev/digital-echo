@@ -1,0 +1,12 @@
+pandas==2.2.3
+networkx==3.4.2
+SQLAlchemy==2.0.36
+PyMySQL==1.1.1
+python-dotenv==1.0.1
+voltdbclient==14.2.0
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+pydantic==2.10.3
+PyJWT==2.10.1
+httpx==0.28.1
+email-validator==2.2.0

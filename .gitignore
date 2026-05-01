@@ -1,0 +1,48 @@
+# Секреты и переменные окружения
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / редакторы
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Логи и временные файлы
+*.log
+*.tmp
+logs/
+
+# Данные и артефакты
+data/
+services/backend/data/*.sqlite
+services/backend/data/*.sqlite-journal
+*.csv
+*.parquet
+*.pkl
+*.joblib
+graphs/
+output/

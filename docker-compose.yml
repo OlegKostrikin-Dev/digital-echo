@@ -1,0 +1,67 @@
+services:
+  # FastAPI backend (порт 8000)
+  backend:
+    build:
+      context: .
+      dockerfile: services/backend/Dockerfile
+    container_name: digital-echo-backend
+    command:
+      - uvicorn
+      - src.main:app
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8000"
+      - --reload
+      - --reload-dir
+      - src
+      - --log-level
+      - info
+      - --access-log
+    environment:
+      PYTHONPATH: /app
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000
+      ADMIN_TOKEN: local-dev-token
+      SNAPSHOT_PATH: /app/snapshots/graph.pkl
+      ENABLE_ACCESS_GATE: ${ENABLE_ACCESS_GATE:-1}
+      AUTH_SQLITE_PATH: /app/data/auth.sqlite
+    env_file:
+      - .env
+    volumes:
+      - ./services/backend/src:/app/src
+      - ./services/backend/data:/app/data
+      - ./snapshots:/app/snapshots
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  # React frontend (Vite dev-сервер, порт 3000)
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: digital-echo-web
+    environment:
+      VITE_API_URL: ""
+      VITE_DOCS_URL: http://localhost:8080
+      VITE_PROXY_TARGET: http://backend:8000
+      CHOKIDAR_USEPOLLING: "1"
+    volumes:
+      - ./apps/web:/app/apps/web
+      - /app/apps/web/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  # Проектная документация (MkDocs Material, порт 8080)
+  docs:
+    image: squidfunk/mkdocs-material:9.5.39
+    container_name: digital-echo-docs
+    ports:
+      - "8080:8000"
+    volumes:
+      - .:/docs
+    command: serve --dev-addr 0.0.0.0:8000
+    restart: unless-stopped
