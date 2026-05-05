@@ -19,7 +19,12 @@ git pull origin main
 echo "[2/3] Сборка и перезапуск контейнеров"
 docker compose -f docker-compose.prod.yml up -d --build
 
-echo "[3/3] Перезапуск web (Vite подхватывает bind-mount; при сбоях HMR — полный рестарт)"
+echo "[3/4] Перезапуск web (Vite подхватывает bind-mount)"
 docker compose -f docker-compose.prod.yml restart web
 
-echo "Готово. Проверка: curl -s http://127.0.0.1:8001/api/health"
+echo "[4/4] Перезапуск docs (MkDocs читает mkdocs.yml при старте — без рестарта навигация может не обновиться)"
+docker compose -f docker-compose.prod.yml restart docs
+
+echo "Готово."
+echo "  API:  curl -s http://127.0.0.1:8001/api/health"
+echo "  Docs: откройте :8080 с принудительным обновлением в браузере (Ctrl+F5), при необходимости очистите кэш."
