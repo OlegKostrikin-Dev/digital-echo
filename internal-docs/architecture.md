@@ -179,4 +179,4 @@ VOLTDB_PASSWORD=<VOLTDB_PASSWORD>
   держатся в памяти. Если понадобится 10M+ — переедем на
   graph-tool/igraph или на Spark GraphFrames.
 
-См. [Roadmap](roadmap.md) о том, куда планируем двигаться.
+См. [Roadmap](../../docs/roadmap.md) о том, куда планируем двигаться.

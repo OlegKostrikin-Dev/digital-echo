@@ -186,4 +186,4 @@ $\log_{0.94}(10^{-7}) \approx 240$ итераций.
 | Gauss-Seidel вместо Jacobi (используем уже обновлённые значения) | ×2 |
 | Параллельный Jacobi (multiprocessing) | ×N, N — число ядер |
 
-См. [Roadmap](../roadmap.md).
+См. [Roadmap](../../docs/roadmap.md).

@@ -86,26 +86,12 @@ extra:
 nav:
   - Главная: index.md
   - О проекте простыми словами: executive-summary.md
-  - Архитектура: architecture.md
   - Алгоритм:
       - algorithm/index.md
-      - Граф транзакций: algorithm/graph-construction.md
       - Расчёт индекса КС: algorithm/kz-content.md
       - Конусы и аналитика: algorithm/analytical-views.md
   - Источники данных:
-      - MySQL (источник ЭСФ): data-sources/mysql.md
-      - VoltDB (taxpayer): data-sources/voltdb.md
-      - Нормализация BIN: data-sources/bin-normalization.md
-  - Эксплуатация:
-      - operations/setup.md
-      - operations/running.md
-      - Демо-сценарии: operations/demo-scenarios.md
-      - Диагностика: operations/troubleshooting.md
-  - ADR:
-      - decisions/index.md
-      - 001 — NetworkX как движок графа: decisions/001-graph-engine.md
-      - 002 — Резидентность из VoltDB: decisions/002-voltdb-residency.md
-      - 003 — Fixed-point итерации: decisions/003-iterative-fixed-point.md
+      - data-sources/overview.md
   - Ограничения и Roadmap:
       - limitations.md
       - roadmap.md

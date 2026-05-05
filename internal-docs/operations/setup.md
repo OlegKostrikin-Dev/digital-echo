@@ -177,12 +177,17 @@ digital-echo-core/
 │               ├── SearchPage.tsx
 │               └── CompanyPage.tsx
 │
-└── docs/                             # MkDocs Material
-    ├── index.md
+├── docs/                             # публичная MkDocs (методология)
+│   ├── index.md
+│   ├── algorithm/
+│   └── data-sources/
+│
+└── internal-docs/                    # техническая документация (не в MkDocs)
+    ├── README.md
     ├── architecture.md
-    ├── algorithm/
-    ├── data-sources/
     ├── operations/
+    ├── algorithm/graph-construction.md
+    ├── data-sources/
     └── decisions/
 ```
 
