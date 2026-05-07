@@ -146,18 +146,48 @@ export default function HomePage() {
       />
 
       {state?.readonly && (
-        <section className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <strong className="font-semibold">Демо-режим (snapshot).</strong>{" "}
-          Сервис работает на сохранённом снимке графа от{" "}
-          {state.snapshot_saved_at
-            ? new Date(state.snapshot_saved_at).toLocaleString("ru-RU", {
-                dateStyle: "long",
-                timeStyle: "short",
-              })
-            : "—"}
-          . Пересчёт периода и подключение к ЭСФ/VoltDB в этом режиме
-          отключены — все остальные запросы (по компании, кейсы, агрегат)
-          доступны в полном объёме.
+        <section className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 space-y-2">
+          <p>
+            <strong className="font-semibold">Демо-режим (snapshot).</strong>{" "}
+            Сервис работает на сохранённом снимке графа
+            {state.snapshot_saved_at
+              ? ` от ${new Date(state.snapshot_saved_at).toLocaleString("ru-RU", {
+                  dateStyle: "long",
+                  timeStyle: "short",
+                })}`
+              : ""}
+            . Пересчёт периода и подключение к боевой ЭСФ и VoltDB в этом режиме
+            отключены — остальная аналитика доступна в полном объёме: срез по экономике,
+            расчёт по компании, меню кейсов, агрегаты, распределение, топ импортёров,
+            поиск по БИН.
+          </p>
+          <p>
+            <strong className="font-semibold">Данные в снимке:</strong>{" "}
+            синтетическая демо-база (~3&nbsp;млн учётных документов ЭСФ,
+            пары строк в{" "}
+            <code className="rounded bg-amber-100/80 px-1 text-xs">
+              invoice_search
+            </code>{" "}
+            /{" "}
+            <code className="rounded bg-amber-100/80 px-1 text-xs">
+              invoice_search_advanced
+            </code>
+            ).{" "}
+            {state.meta?.date_from && state.meta?.date_to ? (
+              <>
+                В расчёт попал период оборота (turnover_date):{" "}
+                <strong>
+                  {state.meta.date_from} — {state.meta.date_to}
+                </strong>
+                {state.meta.days != null && (
+                  <> ({state.meta.days} дней)</>
+                )}
+                .
+              </>
+            ) : (
+              <>Параметры периода см. в блоке «Срез данных» ниже на главной.</>
+            )}
+          </p>
         </section>
       )}
 
