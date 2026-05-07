@@ -67,6 +67,7 @@ export default function CasesPage() {
         ) : (
           <Table
             head={["BIN", "Название", "Продажи", "Покупателей"]}
+            rowKeys={data.importers.map((r) => String(r.tin))}
             rows={data.importers.map((r) => [
               <TinLink tin={r.tin} key="tin" />,
               shortName(r.name, 40),
@@ -91,6 +92,7 @@ export default function CasesPage() {
         ) : (
           <Table
             head={["BIN", "Название", "Продажи", "kz"]}
+            rowKeys={data.dependents.map((r) => String(r.tin))}
             rows={data.dependents.map((r) => [
               <TinLink tin={r.tin} key="tin" />,
               shortName(r.name, 40),
@@ -115,6 +117,7 @@ export default function CasesPage() {
         ) : (
           <Table
             head={["BIN", "Название", "Продажи", "kz"]}
+            rowKeys={data.clean.map((r) => String(r.tin))}
             rows={data.clean.map((r) => [
               <TinLink tin={r.tin} key="tin" />,
               shortName(r.name, 40),
@@ -233,9 +236,12 @@ function Empty({ children }: { children: React.ReactNode }) {
 function Table({
   head,
   rows,
+  rowKeys,
 }: {
   head: React.ReactNode[];
   rows: React.ReactNode[][];
+  /** Стабильный ключ строки (БИН), чтобы React не путал ячейки при смене данных. */
+  rowKeys?: string[];
 }) {
   return (
     <table className="w-full text-sm">
@@ -251,7 +257,7 @@ function Table({
       <tbody>
         {rows.map((row, i) => (
           <tr
-            key={i}
+            key={rowKeys?.[i] ?? i}
             className="border-b border-slate-100 last:border-0 hover:bg-slate-50"
           >
             {row.map((cell, j) => (

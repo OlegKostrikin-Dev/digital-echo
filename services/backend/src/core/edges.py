@@ -55,7 +55,7 @@ NODE_ATTRS_QUERY = text(
 
 
 def build_connection_url() -> str:
-    """Сборка URL подключения к MySQL из переменных окружения."""
+    """Сборка URL подключения к боевой MySQL из MYSQL_*."""
     host = os.getenv("MYSQL_HOST")
     port = os.getenv("MYSQL_PORT", "3306")
     user = os.getenv("MYSQL_USER")
@@ -66,6 +66,25 @@ def build_connection_url() -> str:
         raise RuntimeError("Не заданы обязательные переменные окружения MySQL.")
 
     # quote_plus — на случай спецсимволов в пароле/имени БД (например, '$', '-')
+    return (
+        f"mysql+pymysql://{quote_plus(user)}:{quote_plus(password)}"
+        f"@{host}:{port}/{quote_plus(database)}?charset=utf8mb4"
+    )
+
+
+def build_synthetic_connection_url() -> str:
+    """Отдельная демо-БД с синтетическими ЭСФ (`esf_synthetic_demo` и т.п.)."""
+    host = os.getenv("MYSQL_SYNTHETIC_HOST") or os.getenv("MYSQL_HOST")
+    port = os.getenv("MYSQL_SYNTHETIC_PORT") or os.getenv("MYSQL_PORT", "3306")
+    user = os.getenv("MYSQL_SYNTHETIC_USER")
+    password = os.getenv("MYSQL_SYNTHETIC_PASSWORD")
+    database = os.getenv("MYSQL_SYNTHETIC_DATABASE")
+
+    if not all([host, user, password, database]):
+        raise RuntimeError(
+            "Не заданы MYSQL_SYNTHETIC_HOST/USER/PASSWORD/DATABASE "
+            "(или MYSQL_HOST как запасной для host)."
+        )
     return (
         f"mysql+pymysql://{quote_plus(user)}:{quote_plus(password)}"
         f"@{host}:{port}/{quote_plus(database)}?charset=utf8mb4"

@@ -163,9 +163,17 @@ def compute_list_cases(kz: dict, G: nx.DiGraph, n: int = 5) -> dict[str, Any]:
         })
     dependents.sort(key=lambda r: r["kz"])
 
+    # Участники циклов (SCC размером > 1) не могут быть «чистыми отечественными»
+    _cycle_nodes: set = set()
+    for comp in nx.strongly_connected_components(G):
+        if len(comp) > 1:
+            _cycle_nodes.update(comp)
+
     clean: list[dict] = []
     for v in G.nodes:
         if G.nodes[v].get("is_non_resident"):
+            continue
+        if v in _cycle_nodes:
             continue
         s = _node_sales(G, v)
         if s < 100_000_000 or kz[v] < 0.99:

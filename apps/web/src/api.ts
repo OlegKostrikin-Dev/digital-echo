@@ -100,6 +100,7 @@ export function fmtMoney(x: number | null | undefined): string {
   if (x == null || Number.isNaN(x)) return "—";
   const sign = x < 0 ? "-" : "";
   const a = Math.abs(x);
+  if (a >= 1e12) return `${sign}${(a / 1e12).toFixed(2).replace(".", ",")} трлн ₸`;
   if (a >= 1e9) return `${sign}${(a / 1e9).toFixed(2).replace(".", ",")} млрд ₸`;
   if (a >= 1e6) return `${sign}${(a / 1e6).toFixed(2).replace(".", ",")} млн ₸`;
   if (a >= 1e3) return `${sign}${(a / 1e3).toFixed(0)} тыс ₸`;
