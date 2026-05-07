@@ -19,21 +19,28 @@ export default function HomePage() {
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("economy");
 
-  // Polling state when computing
+  // Первый опрос + поллинг только в computing. После перезапуска uvicorn/docker
+  // бэкенд снова idle, а старый ready в React не сбросится — догоняем по focus.
   useEffect(() => {
     let timer: number | undefined;
+
+    async function applyState(s: StateResponse) {
+      setState(s);
+      if (s.status === "ready") {
+        try {
+          setAggregate(await api.getAggregate());
+        } catch {
+          /* noop */
+        }
+      } else {
+        setAggregate(null);
+      }
+    }
 
     async function poll() {
       try {
         const s = await api.getState();
-        setState(s);
-        if (s.status === "ready") {
-          try {
-            setAggregate(await api.getAggregate());
-          } catch {
-            /* noop */
-          }
-        }
+        await applyState(s);
         if (s.status === "computing") {
           timer = window.setTimeout(poll, 2000);
         }
@@ -43,7 +50,24 @@ export default function HomePage() {
     }
 
     poll();
+
+    async function refreshOnFocus() {
+      try {
+        const s = await api.getState();
+        await applyState(s);
+      } catch {
+        /* noop */
+      }
+    }
+    window.addEventListener("focus", refreshOnFocus);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refreshOnFocus();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
     return () => {
+      window.removeEventListener("focus", refreshOnFocus);
+      document.removeEventListener("visibilitychange", onVisible);
       if (timer) window.clearTimeout(timer);
     };
   }, []);

@@ -27,6 +27,24 @@ class AccessGateMiddleware(BaseHTTPMiddleware):
         if path.startswith("/api/auth") or path == "/api/health":
             return await call_next(request)
 
+        # Скрипты и curl: /api/admin/* с верным X-Admin-Token без браузерной сессии.
+        expected_admin = (os.getenv("ADMIN_TOKEN") or "").strip()
+        admin_hdr = (
+            (request.headers.get("x-admin-token") or request.headers.get("X-Admin-Token") or "")
+            .strip()
+        )
+        if path.startswith("/api/admin/") and expected_admin and admin_hdr == expected_admin:
+            return await call_next(request)
+
+        # curl: GET /api/state с тем же токеном (без cookie)
+        if (
+            request.method == "GET"
+            and path == "/api/state"
+            and expected_admin
+            and admin_hdr == expected_admin
+        ):
+            return await call_next(request)
+
         token = request.cookies.get(COOKIE_NAME)
         if not token:
             return JSONResponse(

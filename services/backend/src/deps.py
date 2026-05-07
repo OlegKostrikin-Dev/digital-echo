@@ -186,6 +186,13 @@ class GraphState:
                 self._kz = state["kz"]
                 self._meta = state["meta"]
                 self._status = "ready"
+                auto = os.getenv("AUTO_SAVE_SNAPSHOT", "").strip().lower()
+                if auto in ("1", "true", "yes") and self._snapshot_path:
+                    try:
+                        p = self.save_to_disk()
+                        log.info("AUTO_SAVE_SNAPSHOT: записан снимок %s", p)
+                    except Exception as snap_exc:  # noqa: BLE001
+                        log.warning("AUTO_SAVE_SNAPSHOT: не удалось сохранить: %s", snap_exc)
             except Exception as exc:  # noqa: BLE001
                 self._error = f"{type(exc).__name__}: {exc}\n\n{traceback.format_exc()}"
                 self._status = "error"
