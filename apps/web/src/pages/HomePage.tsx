@@ -407,7 +407,7 @@ export default function HomePage() {
 
       {/* Meta */}
       {meta && state?.status === "ready" && (
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="grid grid-cols-1 gap-4">
           <div className="card">
             <h3 className="font-semibold text-slate-900 mb-3">Срез данных</h3>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
@@ -423,27 +423,7 @@ export default function HomePage() {
               <dd>{fmtNum(meta.nodes ?? 0)}</dd>
               <dt className="text-slate-500">После фильтра</dt>
               <dd>{fmtNum(meta.edges_after_filter ?? 0)}</dd>
-            </dl>
-          </div>
-          <div className="card">
-            <h3 className="font-semibold text-slate-900 mb-3">
-              Обогащение и расчёт
-            </h3>
-            <dl className="grid grid-cols-2 gap-y-2 text-sm">
-              <dt className="text-slate-500">Резидентов</dt>
-              <dd>
-                {fmtNum(
-                  (meta.voltdb?.resolved ?? 0) -
-                    (meta.voltdb?.non_resident ?? 0),
-                )}
-              </dd>
-              <dt className="text-slate-500">Нерезидентов</dt>
-              <dd className="text-amber-700 font-medium">
-                {fmtNum(meta.voltdb?.non_resident ?? 0)}
-              </dd>
-              <dt className="text-slate-500">Не в справочнике</dt>
-              <dd>{fmtNum(meta.voltdb?.missing ?? 0)}</dd>
-              <dt className="text-slate-500">Итераций</dt>
+              <dt className="text-slate-500">Итераций (КС)</dt>
               <dd>
                 {meta.compute?.iterations}
                 {meta.compute?.converged ? "" : " (не сошлось)"}
