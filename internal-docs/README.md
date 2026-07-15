@@ -10,6 +10,7 @@
 | [`operations/`](operations/) | Установка, запуск API, демо-сценарии, диагностика |
 | [`algorithm/graph-construction.md`](algorithm/graph-construction.md) | Построение рёбер графа, SQL, Python, VoltDB-обогащение |
 | [`data-sources/`](data-sources/) | MySQL/VoltDB: схемы, индексы, нормализация BIN |
+| [`data-exchange/`](data-exchange/) | Обмен данными с ИВЦ: наш черновик по анонимизации и ответы ИВЦ |
 | [`decisions/`](decisions/) | Architecture Decision Records |
 
 При изменении публичных страниц проверяйте относительные ссылки из `internal-docs/` на документы в `docs/` (префикс `../../docs/`).
