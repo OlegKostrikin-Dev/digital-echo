@@ -12,6 +12,8 @@ Architecture Decision Records — короткие документы, опис�
 | [ADR-001](001-graph-engine.md) | NetworkX как in-memory движок графа | Принято |
 | [ADR-002](002-voltdb-residency.md) | Резидентность из VoltDB, не из MySQL | Принято |
 | [ADR-003](003-iterative-fixed-point.md) | Fixed-point итерации для расчёта kz | Принято |
+| [ADR-004](004-hmac-pseudonymization.md) | Псевдонимизация сторон через HMAC с ключом в ИВЦ | Принято |
+| [ADR-005](005-ecp-resolve-flow.md) | Выдача результата компании: ЭЦП НУЦ РК + резолв через ИВЦ | Принято |
 
 ## Когда добавлять новый ADR
 
